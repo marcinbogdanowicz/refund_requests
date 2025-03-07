@@ -1,6 +1,23 @@
 #!/usr/bin/bash
 
 
+# Ensure that .env and env.example files have the same keys, if both exist
+if [ -f ./docker/.env ] && [ -f ./docker/.env.example ]; then
+  echo "Checking .env and .env.example files..."
+
+  env_keys=$(grep -v '^#' ./docker/.env | grep -v '^$' | cut -d'=' -f1 | sort)
+  example_keys=$(grep -v '^#' ./docker/.env.example | grep -v '^$' | cut -d'=' -f1 | sort)
+
+  diff_output=$(diff <(echo "$env_keys") <(echo "$example_keys"))
+  if [ $? -ne 0 ]; then
+      echo "Error: .env and .env.example files have different keys:"
+      echo "$diff_output"
+      echo "Please update the files to match."
+      exit 1
+  fi
+fi
+
+
 # autoflake
 echo "Checking unused imports and variables with autoflake..."
 CHECK="python -m autoflake --in-place"
