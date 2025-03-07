@@ -90,6 +90,7 @@ ignore = [
 ]
 exclude = [
     '.git',
+    '/**/migrations/*.py',
 ]
 banned-modules = '''
     typing.Optional = Use | None
