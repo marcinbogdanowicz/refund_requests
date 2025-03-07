@@ -1,0 +1,11 @@
+services:
+  refund_request_processing_system:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dev
+    ports:
+      - 8000:8000
+    volumes:
+      - ./refund_request_processing_system:/app/refund_request_processing_system
+    command: echo "Please implement the container command!"
+

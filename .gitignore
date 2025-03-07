@@ -1,0 +1,7 @@
+__pycache__/
+__pypackages__/
+.ipython/
+a.py
+.coverage
+.vscode
+.env
