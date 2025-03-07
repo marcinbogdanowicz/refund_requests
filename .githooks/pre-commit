@@ -42,7 +42,7 @@ fi
 # black
 echo "Checking code with black..."
 CHECK="python -m black --config=./pyproject.toml"
-python_files_to_check=$(git diff --cached --name-only --diff-filter=d | grep -E '\.(py)$' | tr '\n' ' ')
+python_files_to_check=$(git diff --cached --name-only --diff-filter=d | grep -E '\.(py)$' | grep -v '/migrations/' | tr '\n' ' ')
 
 status=0
 for file in $python_files_to_check; do
