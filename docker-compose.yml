@@ -18,7 +18,7 @@ services:
     - ./docker/.env
     volumes:
       - ./refund_request_processing_system:/app/refund_request_processing_system
-    command: echo "Please implement the container command!"
+    command: python refund_request_processing_system/manage.py runserver 0.0.0.0:8000
     depends_on:
       - postgres
 
