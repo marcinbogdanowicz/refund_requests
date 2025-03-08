@@ -7,7 +7,8 @@ from django.contrib.auth.views import (
     PasswordResetDoneView,
     PasswordResetView,
 )
-from django.urls import path
+from django.urls import path, reverse_lazy
+from django.views.generic import RedirectView
 
 from apps.core.forms import (
     BootstrapAuthenticationForm,
@@ -22,6 +23,9 @@ from apps.refunds.views import (
 )
 
 urlpatterns = [
+    path(
+        '', RedirectView.as_view(url=reverse_lazy('refund_list')), name='home'
+    ),
     path('admin/', admin.site.urls),
     path(
         'accounts/login/',
@@ -29,7 +33,11 @@ urlpatterns = [
         name='login',
     ),
     path('accounts/signup/', SignUpView.as_view(), name='signup'),
-    path('accounts/logout/', LogoutView.as_view(), name='logout'),
+    path(
+        'accounts/logout/',
+        LogoutView.as_view(next_page=reverse_lazy('login')),
+        name='logout',
+    ),
     path(
         'accounts/password_reset/',
         PasswordResetView.as_view(
@@ -72,7 +80,11 @@ urlpatterns = [
         ),
         name='password_reset_complete',
     ),
-    path('refunds/', RefundRequestListView.as_view(), name='refund_list'),
+    path(
+        'refunds/',
+        RefundRequestListView.as_view(),
+        name='refund_list',
+    ),
     path(
         'refunds/create/',
         CreateRefundRequestView.as_view(),
