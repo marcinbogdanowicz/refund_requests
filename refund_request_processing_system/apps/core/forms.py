@@ -32,7 +32,6 @@ class UserProfileCreationForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ("phone_number",)
-        fields = ("phone_number",)
 
 
 class BootstrapPasswordResetForm(BootstrapFormMixin, PasswordResetForm):
