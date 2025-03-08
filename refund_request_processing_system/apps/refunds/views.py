@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, DetailView, ListView
 
 from apps.refunds.forms import RefundRequestForm
 from apps.refunds.models import RefundRequest
@@ -27,3 +27,9 @@ class RefundRequestListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return RefundRequest.objects.filter(user=self.request.user)
+
+
+class RefundRequestDetailView(DetailView):
+    model = RefundRequest
+    template_name = 'refunds/refund_request_detail.html'
+    context_object_name = 'refund_request'

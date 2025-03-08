@@ -8,7 +8,7 @@
     {% for refund_request in refund_requests %}
       <li>
         {{ refund_request }}
-        <a href="">
+        <a href="{% url 'refund_detail' refund_request.pk %}">
           Details
         </a>
       </li>

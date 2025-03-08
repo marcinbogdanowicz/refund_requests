@@ -10,7 +10,11 @@ from django.contrib.auth.views import (
 from django.urls import path
 
 from apps.core.views import SignUpView
-from apps.refunds.views import CreateRefundRequestView, RefundRequestListView
+from apps.refunds.views import (
+    CreateRefundRequestView,
+    RefundRequestDetailView,
+    RefundRequestListView,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -63,6 +67,10 @@ urlpatterns = [
         CreateRefundRequestView.as_view(),
         name='create_refund',
     ),
-    # path('refunds/<int:pk>/', RefundRequestDetailView.as_view(), name='refund_detail'),
+    path(
+        'refunds/<int:pk>/',
+        RefundRequestDetailView.as_view(),
+        name='refund_detail',
+    ),
     # path('api/validate-iban/', ValidateIBANView.as_view(), name='validate_iban'),
 ]
