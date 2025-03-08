@@ -8,6 +8,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  mailpit:
+    image: axllent/mailpit
+    ports:
+      - 8025:8025
+      - 1025:1025
+
   refund_request_processing_system:
     build:
       context: .
