@@ -112,4 +112,5 @@ skip_string_normalization = true
 [tool.isort]
 profile = 'black'
 line_length = 80
+known_first_party = ['apps']
 
