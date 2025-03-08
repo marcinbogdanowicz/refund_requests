@@ -5,7 +5,7 @@
 {% block content %}
     <p class="h2 mb-3">Refund request no. {{ refund_request.id }}</p>
     <p><strong>Status:</strong> {{ refund_request.get_status_display }}</p>
-    <p><strong>Order:</strong> {{ refund_request.order }} from {{ refund_request.order_date }}</p>
+    <p><strong>Order:</strong> {{ refund_request.order_number }} from {{ refund_request.order_date }}</p>
     <p><strong>Products:</strong><br>{{ refund_request.products }}</p>
     <p><strong>Reason:</strong><br>{{ refund_request.reason }}</p>
     <p>

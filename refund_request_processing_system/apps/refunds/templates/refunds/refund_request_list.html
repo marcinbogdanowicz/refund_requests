@@ -4,16 +4,33 @@
 
 {% block content %}
   <p class="h2 mb-3">Your refund requests</p>
-  <ul>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Created</th>
+        <th>Status</th>
+        <th>Order no.</th>
+        <th>Order date</th>
+        <th>Products</th>
+        <th>Actions</th>
+      </tr>
     {% for refund_request in refund_requests %}
-      <li>
-        {{ refund_request }}
-        <a href="{% url 'refund_detail' refund_request.pk %}">
-          Details
-        </a>
-      </li>
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ refund_request.created_at|date:'d/m/y' }}</td>
+        <td>{{ refund_request.status|capfirst }}</td>
+        <td>{{ refund_request.order_number }}</td>
+        <td>{{ refund_request.order_date|date:'d/m/Y' }}</td>
+        <td>{{ refund_request.products|truncatechars:50 }}</td>
+        <td>
+          <a href="{% url 'refund_detail' refund_request.pk %}">
+            Details
+          </a>
+        </td>
+      </tr>
     {% empty %}
-      <li>No refund requests yet.</li>
+      <tr><td colspan=5>No refund requests yet.</td></tr>
     {% endfor %}
-  </ul>
+  </table>
 {% endblock %}
