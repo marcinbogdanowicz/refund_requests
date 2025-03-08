@@ -9,7 +9,7 @@ from apps.refunds.models import RefundRequest
 class CreateRefundRequestView(LoginRequiredMixin, CreateView):
     model = RefundRequest
     form_class = RefundRequestForm
-    template_name = 'refunds/refund_request_form.html'
+    template_name = 'refunds/create.html'
     success_url = reverse_lazy('create_refund')
 
     def get_initial(self):
@@ -22,7 +22,7 @@ class CreateRefundRequestView(LoginRequiredMixin, CreateView):
 
 class RefundRequestListView(LoginRequiredMixin, ListView):
     model = RefundRequest
-    template_name = 'refunds/refund_request_list.html'
+    template_name = 'refunds/list.html'
     context_object_name = 'refund_requests'
 
     def get_queryset(self):
@@ -31,5 +31,5 @@ class RefundRequestListView(LoginRequiredMixin, ListView):
 
 class RefundRequestDetailView(DetailView):
     model = RefundRequest
-    template_name = 'refunds/refund_request_detail.html'
+    template_name = 'refunds/detail.html'
     context_object_name = 'refund_request'
