@@ -6,6 +6,8 @@
   </head>
   <body>
     {% if user.is_authenticated %}
+      <a href="{% url 'create_refund' %}">Request refund</a>
+      | <a href="{% url 'refund_list' %}">My requests</a>
       <form action="{% url 'logout' %}" method="post">
         {% csrf_token %}
         <button type="submit">Log out</button>

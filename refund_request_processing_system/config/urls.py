@@ -10,7 +10,7 @@ from django.contrib.auth.views import (
 from django.urls import path
 
 from apps.core.views import SignUpView
-from apps.refunds.views import CreateRefundRequestView
+from apps.refunds.views import CreateRefundRequestView, RefundRequestListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -57,7 +57,7 @@ urlpatterns = [
         ),
         name='password_reset_complete',
     ),
-    # path('refunds/', RefundRequestListView.as_view(), name='refund_list'),
+    path('refunds/', RefundRequestListView.as_view(), name='refund_list'),
     path(
         'refunds/create/',
         CreateRefundRequestView.as_view(),

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}My requests{% endblock %}
+
+{% block content %}
+  <h1>Your refund requests</h1>
+  <ul>
+    {% for refund_request in refund_requests %}
+      <li>
+        {{ refund_request }}
+        <a href="">
+          Details
+        </a>
+      </li>
+    {% empty %}
+      <li>No refund requests yet.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
