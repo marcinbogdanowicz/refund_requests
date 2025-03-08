@@ -9,6 +9,11 @@ from django.contrib.auth.views import (
 )
 from django.urls import path
 
+from apps.core.forms import (
+    BootstrapAuthenticationForm,
+    BootstrapPasswordResetForm,
+    BootstrapSetPasswordForm,
+)
 from apps.core.views import SignUpView
 from apps.refunds.views import (
     CreateRefundRequestView,
@@ -18,13 +23,18 @@ from apps.refunds.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/login/', LoginView.as_view(), name='login'),
+    path(
+        'accounts/login/',
+        LoginView.as_view(form_class=BootstrapAuthenticationForm),
+        name='login',
+    ),
     path('accounts/signup/', SignUpView.as_view(), name='signup'),
     path('accounts/logout/', LogoutView.as_view(), name='logout'),
     path(
         'accounts/password_reset/',
         PasswordResetView.as_view(
             template_name="registration/password_reset_generic.html",
+            form_class=BootstrapPasswordResetForm,
             extra_context={
                 "title": "Reset password",
                 "message": "Reset link will be sent to your email.",
@@ -47,6 +57,7 @@ urlpatterns = [
         'accounts/reset/<uidb64>/<token>/',
         PasswordResetConfirmView.as_view(
             template_name="registration/password_reset_generic.html",
+            form_class=BootstrapSetPasswordForm,
         ),
         name='password_reset_confirm',
     ),

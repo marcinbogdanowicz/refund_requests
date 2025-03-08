@@ -3,10 +3,10 @@
 {% block title %}Request Refund{% endblock %}
 
 {% block content %}
-  <h1>Request refund</h1>
-  <form method="post">
+  <p class="h2 mb-3">Request refund</p>
+  <form method="post" novalidate>
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit</button>
+    {{ form.as_div }}
+    <button type="submit" class="btn btn-dark mt-3">Submit</button>
   </form>
 {% endblock %}

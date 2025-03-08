@@ -1,10 +1,17 @@
-from apps.core.models import UserProfile
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import (
+    AuthenticationForm,
+    PasswordResetForm,
+    SetPasswordForm,
+    UserCreationForm,
+)
 from django.contrib.auth.models import User
 
+from apps.core.mixins import BootstrapFormMixin
+from apps.core.models import UserProfile
 
-class CustomUserCreationForm(UserCreationForm):
+
+class CustomUserCreationForm(BootstrapFormMixin, UserCreationForm):
     prefix = "user"
 
     class Meta:
@@ -19,9 +26,22 @@ class CustomUserCreationForm(UserCreationForm):
         )
 
 
-class UserProfileCreationForm(forms.ModelForm):
+class UserProfileCreationForm(BootstrapFormMixin, forms.ModelForm):
     prefix = "profile"
 
     class Meta:
         model = UserProfile
         fields = ("phone_number",)
+        fields = ("phone_number",)
+
+
+class BootstrapPasswordResetForm(BootstrapFormMixin, PasswordResetForm):
+    pass
+
+
+class BootstrapAuthenticationForm(BootstrapFormMixin, AuthenticationForm):
+    pass
+
+
+class BootstrapSetPasswordForm(BootstrapFormMixin, SetPasswordForm):
+    pass
