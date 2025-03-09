@@ -5,3 +5,4 @@ a.py
 .coverage
 .vscode
 .env
+refund_request_processing_system/static/

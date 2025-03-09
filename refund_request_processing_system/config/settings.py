@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 from django.urls import reverse_lazy
+from import_export.formats.base_formats import CSV
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -22,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'import_export',
     'apps.core',
     'apps.refunds',
 ]
@@ -104,6 +106,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'static'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -133,3 +136,5 @@ REDIS_CACHE = {
     'TIMEOUT': 3600,  # 1 hour
 }
 CACHES = {'default': REDIS_CACHE}
+
+IMPORT_EXPORT_FORMATS = [CSV]

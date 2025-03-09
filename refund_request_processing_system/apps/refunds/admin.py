@@ -1,14 +1,22 @@
 from django.contrib import admin
 from django.db.models import Case, IntegerField, Value, When
 from django.utils.safestring import mark_safe
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
 
 from apps.core.utils import comma_join_str
 from apps.refunds.enums import RefundStatus
 from apps.refunds.models import RefundRequest
 
 
-class RefundRequestAdmin(admin.ModelAdmin):
+class RefundRequestResource(resources.ModelResource):
+    class Meta:
+        model = RefundRequest
+
+
+class RefundRequestAdmin(ImportExportModelAdmin):
     model = RefundRequest
+    resource_classes = [RefundRequestResource]
     list_display = [
         'id',
         'status',
