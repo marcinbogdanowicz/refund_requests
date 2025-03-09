@@ -1,3 +1,7 @@
+import hashlib
+
+from django.core.cache import cache
+
 from apps.refunds.clients import APINinjasClient
 
 
@@ -6,12 +10,20 @@ class IBANValidator:
         self.iban = iban
         self.country = country
 
+        self.cache_key = hashlib.md5(f'{iban}-{country}'.encode()).hexdigest()
+
     def get_error(self):
+        if cached_result := cache.get(self.cache_key):
+            return cached_result
+
         validation_response = self._get_iban_validation_response()
         if not validation_response:
             raise RuntimeError('Validation service is unavailable.')
 
-        return self._get_external_validation_error(validation_response)
+        result = self._get_external_validation_error(validation_response)
+        cache.set(self.cache_key, result)
+
+        return result
 
     def _get_iban_validation_response(self):
         client = APINinjasClient()
