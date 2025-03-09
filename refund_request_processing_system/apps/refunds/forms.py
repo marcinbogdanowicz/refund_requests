@@ -1,7 +1,11 @@
+from contextlib import suppress
+
 from django import forms
+from django.core.exceptions import ValidationError
 
 from apps.core.mixins import BootstrapFormMixin
 from apps.refunds.models import RefundRequest
+from apps.refunds.utils import IBANValidator
 
 
 class RefundRequestForm(BootstrapFormMixin, forms.ModelForm):
@@ -44,3 +48,18 @@ class RefundRequestForm(BootstrapFormMixin, forms.ModelForm):
             'email': user.email,
             'phone_number': user.userprofile.phone_number,
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        iban = cleaned_data.get('iban')
+        country = cleaned_data.get('country')
+
+        iban_validator = IBANValidator(iban, country)
+        with suppress(RuntimeError):
+            if error := iban_validator.get_error():
+                raise ValidationError(error, code='invalid')
+
+            self.instance.iban_verified = True
+
+        return cleaned_data
