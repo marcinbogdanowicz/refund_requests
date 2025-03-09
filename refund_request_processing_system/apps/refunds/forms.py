@@ -28,6 +28,12 @@ class RefundRequestForm(BootstrapFormMixin, forms.ModelForm):
             'address': forms.Textarea(attrs={'rows': 2}),
             'products': forms.Textarea(attrs={'rows': 3}),
             'reason': forms.Textarea(attrs={'rows': 3}),
+            'iban': forms.TextInput(
+                attrs={'pattern': '[A-Z]{2}[0-9]{2}[0-9A-Z]{1,30}'}
+            ),
+        }
+        help_texts = {
+            'iban': 'Only digits and upper case letters. E.g. \'PL10105000997603123456789123\'',
         }
 
     @classmethod
