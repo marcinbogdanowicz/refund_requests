@@ -10,13 +10,11 @@
       {% if field.help_text %}
         <div class="form-text">{{ field.help_text }}</div>
       {% endif %}
-      {% if field.errors %}
-        <div class="invalid-feedback d-block">
-          {% for error in field.errors %}
-            <span>{{ error }}</span>
-          {% endfor %}
-        </div>
-      {% endif %}
+      <div class="invalid-feedback d-block">
+        {% for error in field.errors %}
+          <span>{{ error }}</span>
+        {% endfor %}
+      </div>
     </div>
     {% if forloop.last %}
       {% for field in hidden_fields %}{{ field }}{% endfor %}
