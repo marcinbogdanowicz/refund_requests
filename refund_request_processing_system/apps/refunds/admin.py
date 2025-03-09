@@ -45,6 +45,8 @@ class RefundRequestAdmin(admin.ModelAdmin):
         'status',
     ]
 
+    list_filter = ['status', 'created_at', 'country']
+
     actions = [
         'approve_refund_requests',
         'reject_refund_requests',
