@@ -4,33 +4,46 @@
 
 {% block content %}
   <p class="h2 mb-3">Your refund requests</p>
+  <p>Click rows to expand/collapse details.</p>
   <table class="table">
     <thead>
       <tr>
-        <th>#</th>
-        <th>Created</th>
-        <th>Status</th>
-        <th>Order no.</th>
-        <th>Order date</th>
-        <th>Products</th>
-        <th>Actions</th>
+        <th style="width: 7%">#</th>
+        <th style="width: 15%">Created</th>
+        <th style="width: 15%">Order no.</th>
+        <th style="width: 15%">Order date</th>
+        <th style="width: 38%">Products</th>
+        <th style="width: 10%">Status</th>
       </tr>
+    </thead>
+    <tbody>
     {% for refund_request in refund_requests %}
-      <tr>
+      <tr data-bs-toggle="collapse" data-bs-target="#detail{{ forloop.counter }}" aria-expanded="false" class="clickable">
         <td>{{ forloop.counter }}</td>
         <td>{{ refund_request.created_at|date:'d/m/y' }}</td>
-        <td>{{ refund_request.status|capfirst }}</td>
         <td>{{ refund_request.order_number }}</td>
         <td>{{ refund_request.order_date|date:'d/m/Y' }}</td>
         <td>{{ refund_request.products|truncatechars:50 }}</td>
-        <td>
-          <a href="{% url 'refund_detail' refund_request.pk %}">
-            Details
-          </a>
+        <td>{{ refund_request.status|capfirst }}</td>
+      </tr>
+      <tr class="collapse" id="detail{{ forloop.counter }}">
+        <td colspan="6">
+          <div class="row">
+            <div class="col-12 col-md-10">
+              <p><strong>Full Products List:</strong> {{ refund_request.products|truncatechars:200|linebreaks }}</p>
+              <p><strong>Refund Reason:</strong> {{ refund_request.reason|truncatechars:200|linebreaks }}</p>
+            </div>
+            <div class="col-12 col-md-2">
+              <a href="{% url 'refund_detail' refund_request.pk %}" class="btn btn-dark">
+                Full details
+              </a>
+            </div>
+          </div>
         </td>
       </tr>
     {% empty %}
       <tr><td colspan=5>No refund requests yet.</td></tr>
     {% endfor %}
+    </tbody>
   </table>
 {% endblock %}
