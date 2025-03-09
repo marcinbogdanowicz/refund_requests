@@ -126,5 +126,8 @@ class RefundRequestAdmin(ImportExportModelAdmin):
             )
         ).order_by('_status_order', '-created_at')
 
+    def has_import_permission(self, request):
+        return False
+
 
 admin.site.register(RefundRequest, RefundRequestAdmin)
