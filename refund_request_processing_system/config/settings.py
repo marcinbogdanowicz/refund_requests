@@ -118,3 +118,14 @@ LOGIN_REDIRECT_URL = reverse_lazy('refund_list')
 
 API_NINJAS_API_KEY = os.getenv('API_NINJAS_API_KEY')
 API_NINJAS_IBAN_VALIDATION_URL = 'https://api.api-ninjas.com/v1/iban'
+
+REDIS_HOSTNAME = os.getenv('REDIS_HOSTNAME', 'redis')
+REDIS_MAIN_DB = os.getenv('REDIS_MAIN_DB', 0)
+REDIS_CACHE_VERSION = 1
+REDIS_CACHE = {
+    'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+    'LOCATION': f'redis://{REDIS_HOSTNAME}/{REDIS_MAIN_DB}',
+    'VERSION': REDIS_CACHE_VERSION,
+    'TIMEOUT': 3600,  # 1 hour
+}
+CACHES = {'default': REDIS_CACHE}
