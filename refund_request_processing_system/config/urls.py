@@ -20,6 +20,7 @@ from apps.refunds.views import (
     CreateRefundRequestView,
     RefundRequestDetailView,
     RefundRequestListView,
+    ValidateIBANView,
 )
 
 urlpatterns = [
@@ -95,5 +96,7 @@ urlpatterns = [
         RefundRequestDetailView.as_view(),
         name='refund_detail',
     ),
-    # path('api/validate-iban/', ValidateIBANView.as_view(), name='validate_iban'),
+    path(
+        'api/validate-iban/', ValidateIBANView.as_view(), name='validate_iban'
+    ),
 ]

@@ -16,13 +16,13 @@ class RefundRequestForm(BootstrapFormMixin, forms.ModelForm):
             'last_name',
             'phone_number',
             'email',
-            'bank_name',
-            'account_type',
-            'iban',
-            'country',
             'address',
             'postal_code',
             'city',
+            'country',
+            'iban',
+            'bank_name',
+            'account_type',
         ]
         widgets = {
             'address': forms.Textarea(attrs={'rows': 2}),

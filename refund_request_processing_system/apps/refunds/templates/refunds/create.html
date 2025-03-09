@@ -2,6 +2,102 @@
 
 {% block title %}Request Refund{% endblock %}
 
+{% block head_extra %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  (() => {
+    'use strict';
+
+    var validatedIbansCache = new Map();
+
+    function getCookie(cookieName) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, cookieName.length + 1) === (cookieName + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(cookieName.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    async function validateIBANRequest(data) {
+      var cacheKey = data.iban + data.country;
+      if (validatedIbansCache.has(cacheKey)) {
+        return validatedIbansCache.get(cacheKey);
+      }
+
+      try {
+        const response = await axios.post(
+          '{% url "validate_iban" %}',
+          data,
+          {
+            headers: {
+              'X-CSRFToken': getCookie('csrftoken'),
+            },
+            withCredentials: true,
+          }
+        );
+        validatedIbansCache.set(cacheKey, response.data);
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
+    }
+
+    async function validateIBAN(blurEvent) {
+      const ibanInput = document.querySelector('#id_iban');
+      const iban = ibanInput.value;
+      const country = document.querySelector('#id_country').value;
+
+      if (!iban || !country) {
+        return;
+      }
+
+      const data = {
+        'iban': iban,
+        'country': country,
+      };
+      const validationResult = await validateIBANRequest(data);
+      if (validationResult === null) {
+        return;
+      }
+
+      const ibanFeedbackElement = ibanInput.parentNode.querySelector('.invalid-feedback');
+      if (validationResult.error) {
+        ibanInput.classList.add('is-invalid');
+        ibanInput.setCustomValidity(validationResult.error);
+        if (ibanFeedbackElement) {
+          ibanFeedbackElement.textContent = validationResult.error;
+        }
+      } else {
+        ibanInput.classList.remove('is-invalid');
+        ibanInput.setCustomValidity('');
+        if (ibanFeedbackElement) {
+          ibanFeedbackElement.textContent = '';
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const ibanInput = document.querySelector('#id_iban');
+      const countryInput = document.querySelector('#id_country');
+      if (!ibanInput || !countryInput) {
+        return;
+      }
+
+      ibanInput.addEventListener('blur', validateIBAN);
+      countryInput.addEventListener('blur', validateIBAN);
+    });
+  })()
+</script>
+{% endblock %}
+
 {% block content %}
   <p class="h2 mb-3">Request refund</p>
   <form method="post" novalidate>

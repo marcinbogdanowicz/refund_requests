@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'apps.core',
     'apps.refunds',
 ]
@@ -114,3 +115,6 @@ EMAIL_HOST = os.getenv('EMAIL_HOST', 'localhost')
 EMAIL_PORT = int(os.getenv('EMAIL_PORT', 25))
 
 LOGIN_REDIRECT_URL = reverse_lazy('refund_list')
+
+API_NINJAS_API_KEY = os.getenv('API_NINJAS_API_KEY')
+API_NINJAS_IBAN_VALIDATION_URL = 'https://api.api-ninjas.com/v1/iban'
