@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db.models import Case, IntegerField, Value, When
 from django.utils.safestring import mark_safe
 
 from apps.core.utils import comma_join_str
@@ -101,6 +102,17 @@ class RefundRequestAdmin(admin.ModelAdmin):
 
     def _change_refund_requests_status(self, queryset, status):
         queryset.update(status=status)
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.annotate(
+            _status_order=Case(
+                When(status=RefundStatus.PENDING, then=Value(1)),
+                When(status=RefundStatus.APPROVED, then=Value(2)),
+                When(status=RefundStatus.REJECTED, then=Value(3)),
+                output_field=IntegerField(),
+            )
+        ).order_by('_status_order', '-created_at')
 
 
 admin.site.register(RefundRequest, RefundRequestAdmin)
