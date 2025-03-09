@@ -1,12 +1,14 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+from apps.refunds.enums import RefundStatus
+
 
 class RefundRequest(models.Model):
     STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('approved', 'Approved'),
-        ('rejected', 'Rejected'),
+        (RefundStatus.PENDING, 'Pending'),
+        (RefundStatus.APPROVED, 'Approved'),
+        (RefundStatus.REJECTED, 'Rejected'),
     ]
 
     user = models.ForeignKey(
