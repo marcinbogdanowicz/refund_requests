@@ -104,6 +104,8 @@ class RefundRequestAdmin(admin.ModelAdmin):
 
     def _change_refund_requests_status(self, queryset, status):
         queryset.update(status=status)
+        for refund_request in queryset:
+            refund_request.emit_status_change_email()
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

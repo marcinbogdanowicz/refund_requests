@@ -1,0 +1,17 @@
+{% extends "emails/base.html" %}
+
+{% block content %}
+<p>Dear {{ first_name }},</p>
+
+<p>
+    The status of your <a href="{{ refund_request.full_link }}">refund request #{{ refund_request.id }}</a> 
+    for order no. {{ refund_request.order_number|escape }} was changed to <strong>{{ new_status }}</strong>.
+</p>
+
+<p>Should you have any questions, do not hesitate to contact us.</p>
+
+<p>
+    Best regards,<br>
+    Refunds platform team
+</p>
+{% endblock %}

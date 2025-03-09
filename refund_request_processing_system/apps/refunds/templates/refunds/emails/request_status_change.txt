@@ -1,0 +1,15 @@
+{% extends "emails/base.txt" %}
+
+{% block content %}
+Dear {{ first_name }},
+
+The status of your refund request #{{ refund_request.id }} ({{ refund_request.full_link }})
+for order no. {{ refund_request.order_number|escape }} was changed to '{{ new_status }}'.
+
+Should you have any questions, do not hesitate to contact us.
+
+
+Best regards,
+Refunds platform team
+
+{% endblock %}

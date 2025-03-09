@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Refunds email</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Helvetica, sans-serif;
+                background-color: #f9f9f9;
+                padding: 20px;
+            }
+            .content-container {
+                margin: 20px;
+                padding: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Refunds</h1>
+        <div class="content-container">
+            {% block content %}{% endblock %}
+        </div>
+        <hr>
+        <small>
+            <p>&copy; 2025 Refunds. All rights reserved.</p>
+            <p>You received this email as a member of the <a href="{% url 'home' %}">Refunds</a> service.</p>
+        </small>
+    </body>
+</html>

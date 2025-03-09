@@ -1,8 +1,9 @@
-from apps.core.forms import CustomUserCreationForm, UserProfileCreationForm
 from django.db import transaction
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
+
+from apps.core.forms import CustomUserCreationForm, UserProfileCreationForm
 
 
 class SignUpView(TemplateView):

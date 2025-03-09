@@ -1,6 +1,9 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 
+from apps.refunds.email import RefundRequestStatusChangeEmailMessage
 from apps.refunds.enums import RefundStatus
 
 
@@ -47,3 +50,15 @@ class RefundRequest(models.Model):
 
     def __str__(self):
         return f"Refund #{self.id} - {self.order_number} - {self.status}"
+
+    @property
+    def full_link(self):
+        return settings.BASE_URL + reverse('refund_detail', args=[self.id])
+
+    def emit_status_change_email(self):
+        email_message = RefundRequestStatusChangeEmailMessage.objects.create(
+            refund_request=self,
+            new_status=self.status,
+        )
+        email_message.recipients.add(self.user)
+        email_message.send()

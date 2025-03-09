@@ -1,0 +1,10 @@
+REFUNDS
+
+
+{% block content %}{% endblock %}
+
+
+_____________________________________
+(C) 2025 Refunds. All rights reserved.
+
+You received this email as a member of the Refunds service ({% url 'home' %}).
