@@ -35,7 +35,9 @@ class RefundRequestListView(
     paginate_by = 10
 
 
-class RefundRequestDetailView(OnlyOwnedObjectsViewMixin, DetailView):
+class RefundRequestDetailView(
+    LoginRequiredMixin, OnlyOwnedObjectsViewMixin, DetailView
+):
     model = RefundRequest
     template_name = 'refunds/detail.html'
     context_object_name = 'refund_request'
