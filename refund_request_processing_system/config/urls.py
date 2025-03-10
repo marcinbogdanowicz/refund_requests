@@ -15,7 +15,7 @@ from apps.core.forms import (
     BootstrapPasswordResetForm,
     BootstrapSetPasswordForm,
 )
-from apps.core.views import SignUpView
+from apps.core.views import SignUpView, handler_404, handler_500
 from apps.refunds.views import (
     CreateRefundRequestView,
     RefundRequestDetailView,
@@ -100,3 +100,6 @@ urlpatterns = [
         'api/validate-iban/', ValidateIBANView.as_view(), name='validate_iban'
     ),
 ]
+
+handler404 = handler_404
+handler500 = handler_500

@@ -1,5 +1,5 @@
 from django.db import transaction
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
 
@@ -40,3 +40,11 @@ class SignUpView(TemplateView):
         user_profile = profile_form.save(commit=False)
         user_profile.user = user
         user_profile.save()
+
+
+def handler_404(request, exception):
+    return render(request, 'errors/404.html', status=404)
+
+
+def handler_500(request):
+    return render(request, 'errors/500.html', status=400)
