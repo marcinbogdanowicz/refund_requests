@@ -1,3 +1,5 @@
+import textwrap
+
 from django.contrib import admin
 from django.db.models import Case, IntegerField, Value, When
 from django.utils.safestring import mark_safe
@@ -29,6 +31,7 @@ class RefundRequestAdmin(ImportExportModelAdmin):
         'email',
         'phone_number',
         'country',
+        'notes_preview',
     ]
     readonly_fields = [
         'user',
@@ -64,6 +67,9 @@ class RefundRequestAdmin(ImportExportModelAdmin):
 
     def full_name(self, obj):
         return f"{obj.first_name} {obj.last_name}"
+
+    def notes_preview(self, obj):
+        return textwrap.shorten(obj.notes, width=50)
 
     @admin.action(description='Approve')
     def approve_refund_requests(self, request, queryset):

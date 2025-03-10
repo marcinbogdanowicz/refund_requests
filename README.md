@@ -138,7 +138,8 @@ List includes the following information:
 - requestor full name
 - requestor email
 - requestor phone number
-- requestor country.
+- requestor country,
+- admin notes preview (50 characters).
 
 The list is sorted by request status (pending, rejected, approved) and request creation date descending (from the newest).
 
