@@ -62,3 +62,6 @@ class RefundRequest(models.Model):
         )
         email_message.recipients.add(self.user)
         email_message.send()
+
+    class Meta:
+        ordering = ('-created_at',)
