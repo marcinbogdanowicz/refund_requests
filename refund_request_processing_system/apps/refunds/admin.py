@@ -30,7 +30,6 @@ class RefundRequestAdmin(ImportExportModelAdmin):
         'phone_number',
         'country',
     ]
-
     readonly_fields = [
         'user',
         'order_number',
@@ -53,8 +52,8 @@ class RefundRequestAdmin(ImportExportModelAdmin):
         'updated_at',
         'status',
     ]
-
     list_filter = ['status', 'created_at', 'country']
+    list_per_page = 20
 
     actions = [
         'approve_refund_requests',
