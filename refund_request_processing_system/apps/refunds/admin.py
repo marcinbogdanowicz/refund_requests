@@ -7,6 +7,7 @@ from import_export.admin import ImportExportModelAdmin
 from apps.core.utils import comma_join_str
 from apps.refunds.enums import RefundStatus
 from apps.refunds.models import RefundRequest
+from apps.refunds.utils import IBANValidator
 
 
 class RefundRequestResource(resources.ModelResource):
@@ -59,6 +60,7 @@ class RefundRequestAdmin(ImportExportModelAdmin):
         'approve_refund_requests',
         'reject_refund_requests',
         'mark_refund_requests_as_pending',
+        'validate_iban',
     ]
 
     def full_name(self, obj):
@@ -109,6 +111,40 @@ class RefundRequestAdmin(ImportExportModelAdmin):
     @admin.action(description='Mark as pending')
     def mark_refund_requests_as_pending(self, request, queryset):
         self._change_refund_requests_status(queryset, RefundStatus.PENDING)
+
+    @admin.action(description='Validate IBAN')
+    def validate_iban(self, request, queryset):
+        errors = {}
+        valid_ids = []
+        for refund_request in queryset.filter(iban_verified=False):
+            validator = IBANValidator(
+                refund_request.iban, refund_request.country
+            )
+            if error := validator.get_error():
+                errors[refund_request.id] = error
+            else:
+                valid_ids.append(refund_request.id)
+
+        message_level = 'ERROR' if errors else 'SUCCESS'
+        success_message = ''
+        error_message = ''
+        if valid_ids:
+            success_message = (
+                'IBANs for the following refund requests were successfully '
+                f'validated: {comma_join_str(valid_ids)}<br>'
+            )
+        if errors:
+            error_message = (
+                'IBAN validation failed for the following refund requests:'
+            )
+            for refund_request_id, error in errors.items():
+                error_message += f'<br>    - {refund_request_id}: {error}'
+
+        self.message_user(
+            request,
+            mark_safe(f'{success_message}{error_message}'),
+            level=message_level,
+        )
 
     def _change_refund_requests_status(self, queryset, status):
         queryset.update(status=status)
