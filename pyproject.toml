@@ -13,6 +13,7 @@ psycopg = "^3.2.5"
 requests = "^2.32.3"
 redis = "^5.2.1"
 django-import-export = "^4.3.7"
+responses = "^0.25.6"
 
 
 [build-system]

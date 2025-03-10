@@ -1,4 +1,6 @@
 from django import forms
+from django.conf import settings
+from redis import Redis
 
 
 class BootstrapFormMixin:
@@ -28,3 +30,11 @@ class OnlyOwnedObjectsViewMixin:
             return qs.filter(**filter_kwargs)
 
         return qs.none()
+
+
+class FlushRedisDBTestMixin:
+    redis_client = Redis.from_url(settings.REDIS_CACHE['LOCATION'])
+
+    def setUp(self):
+        super().setUp()
+        self.redis_client.flushdb()

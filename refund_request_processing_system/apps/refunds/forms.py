@@ -53,6 +53,8 @@ class RefundRequestForm(BootstrapFormMixin, forms.ModelForm):
             if self.instance.reason not in RefundReason:
                 self.fields['reason_choice'].initial = RefundReason.OTHER
                 self.fields['other_reason'].initial = self.instance.reason
+            else:
+                self.fields['reason_choice'].initial = self.instance.reason
 
     @classmethod
     def initial_for_user(cls, user):
