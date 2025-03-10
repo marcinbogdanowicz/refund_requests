@@ -29,6 +29,7 @@ class RefundRequestListView(LoginRequiredMixin, ListView):
     model = RefundRequest
     template_name = 'refunds/list.html'
     context_object_name = 'refund_requests'
+    paginate_by = 10
 
     def get_queryset(self):
         return RefundRequest.objects.filter(user=self.request.user)
