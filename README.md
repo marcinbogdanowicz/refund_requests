@@ -30,9 +30,10 @@ Frontend:
 Installation steps:
 - clone the repository and `cd` to the top-level directory
 - create `docker/.env` file and fill it with secrets - for development copy the contents of `docker/.env.example` will suffice (see [notes](#notes-on-envexample) below)
-- `docker compose up -d --build` - build the containers
+- `docker compose up -d --build` - build and run the containers
 - `./scripts/command.sh migrate` - apply migrations
 - `./scripts/command.sh collectstatic` - collect static files
+- `./scripts/command.sh createsuperuser` - create admin user
 
 The **development server** will listen at `localhost:8000` after ensuring that PostgreSQL database is available.
 
@@ -185,3 +186,7 @@ For development, a [Mailpit](https://mailpit.axllent.org/) container is added. I
 ## Error handling
 
 Custom error pages are provided for the case of 404 and 500 status codes.
+
+## Tests
+
+To run unit tests, use the command `./scripts/command.sh test`.
