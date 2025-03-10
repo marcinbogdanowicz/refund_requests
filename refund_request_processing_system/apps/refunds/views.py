@@ -15,7 +15,7 @@ class CreateRefundRequestView(LoginRequiredMixin, CreateView):
     model = RefundRequest
     form_class = RefundRequestForm
     template_name = 'refunds/create.html'
-    success_url = reverse_lazy('create_refund')
+    success_url = reverse_lazy('refund_list')
 
     def get_initial(self):
         return self.form_class.initial_for_user(self.request.user)
