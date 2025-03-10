@@ -85,6 +85,8 @@
               </form>
               <a href="#" class="nav-link" onclick="document.getElementById('logout-form').submit(); return false;">Log out</a>
             </li>
+          </ul>
+          <span class="nav-text" style="filter: grayscale(100%);">👤 {{ user.username|truncatechars:15 }}</span>
           {% else %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'login' %}">Log in</a>
@@ -92,8 +94,8 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'signup' %}">Sign up</a>
             </li>
-          {% endif %}
           </ul>
+          {% endif %}
         </div>
       </div>
     </nav>
