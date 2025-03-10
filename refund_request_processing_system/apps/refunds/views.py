@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.core.mixins import OnlyOwnedObjectsViewMixin
 from apps.refunds.forms import RefundRequestForm
 from apps.refunds.models import RefundRequest
 from apps.refunds.serializers import IBANSerializer
@@ -25,17 +26,16 @@ class CreateRefundRequestView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class RefundRequestListView(LoginRequiredMixin, ListView):
+class RefundRequestListView(
+    LoginRequiredMixin, OnlyOwnedObjectsViewMixin, ListView
+):
     model = RefundRequest
     template_name = 'refunds/list.html'
     context_object_name = 'refund_requests'
     paginate_by = 10
 
-    def get_queryset(self):
-        return RefundRequest.objects.filter(user=self.request.user)
 
-
-class RefundRequestDetailView(DetailView):
+class RefundRequestDetailView(OnlyOwnedObjectsViewMixin, DetailView):
     model = RefundRequest
     template_name = 'refunds/detail.html'
     context_object_name = 'refund_request'

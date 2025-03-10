@@ -15,3 +15,16 @@ class BootstrapFormMixin:
             field.widget.attrs['class'] = (
                 f'{current_css_classes} {css_class}'.strip()
             )
+
+
+class OnlyOwnedObjectsViewMixin:
+    user_field_for_filter = 'user'
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+
+        if self.request.user.is_authenticated:
+            filter_kwargs = {self.user_field_for_filter: self.request.user}
+            return qs.filter(**filter_kwargs)
+
+        return qs.none()
