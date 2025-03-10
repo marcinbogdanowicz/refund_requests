@@ -106,7 +106,7 @@
       }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    function addIBANValidationListeners() {
       const ibanInput = document.querySelector('#id_iban');
       const countryInput = document.querySelector('#id_country');
       if (!ibanInput || !countryInput) {
@@ -121,6 +121,32 @@
       if (iban && country) {
         cacheIbanCountryPairValidationResult(iban, country, { error: null });
       }
+    }
+
+    function addShowHideOtherReasonFieldListeners() {
+      const reasonChoiceInput = document.querySelector('#id_reason_choice');
+      const otherReasonInput = document.querySelector('#id_other_reason');
+      if (!reasonChoiceInput || !otherReasonInput) {
+        return;
+      }
+
+      const otherReasonDiv = otherReasonInput.parentNode.parentNode;
+      otherReasonDiv.classList.add('d-none');
+      reasonChoiceInput.addEventListener('change', () => {
+        if (reasonChoiceInput.value === 'Other') {
+          otherReasonDiv.classList.remove('d-none');
+          otherReasonInput.required = true;
+          otherReasonInput.focus();
+        } else {
+          otherReasonDiv.classList.add('d-none');
+          otherReasonInput.required = false;
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      addIBANValidationListeners();
+      addShowHideOtherReasonFieldListeners();
     });
   })()
 </script>
