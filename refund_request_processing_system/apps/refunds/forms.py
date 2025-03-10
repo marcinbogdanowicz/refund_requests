@@ -42,12 +42,32 @@ class RefundRequestForm(BootstrapFormMixin, forms.ModelForm):
 
     @classmethod
     def initial_for_user(cls, user):
-        return {
+        initial = {
             'first_name': user.first_name,
             'last_name': user.last_name,
             'email': user.email,
             'phone_number': user.userprofile.phone_number,
         }
+
+        if last_request := RefundRequest.objects.filter(user=user).last():
+            initial.update(
+                {
+                    'address': last_request.address,
+                    'postal_code': last_request.postal_code,
+                    'city': last_request.city,
+                    'country': last_request.country,
+                    'iban': last_request.iban,
+                    'bank_name': last_request.bank_name,
+                    'account_type': last_request.account_type,
+                }
+            )
+
+            if last_request.iban_verified:
+                IBANValidator(
+                    last_request.iban, last_request.country
+                ).cache_valid_iban()
+
+        return initial
 
     def clean(self):
         cleaned_data = super().clean()
