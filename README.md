@@ -22,7 +22,13 @@ Frontend:
 - JavaScript
 - Axios
 
+There are **two installation variants** available:
+- [dockerized](#dockerized-installation)
+- [direct (without Docker)](#installation-without-docker)
+
 ## Installation
+
+### Dockerized installation 
 
 > [!IMPORTANT]
 > [Docker](https://docs.docker.com/engine/install/) and [docker compose](https://docs.docker.com/compose/install/) are required to run the project.
@@ -44,7 +50,7 @@ The **development server** will listen at `localhost:8000` after ensuring that P
 > but **it is not production ready**. Serving the app with nginx and gunicorn 
 > would be recommended for production usage.
 
-### Notes on `.env` and `.env.example`
+#### Notes on `.env` and `.env.example`
 
 The project implements secrets management via an `.env` file, utilized by docker orchestration for providing secrets through environment variables.
 
@@ -52,6 +58,55 @@ The values provided in `.env.example` file can be used in `.env` file only for
 development purposes. 
 
 The `API_NINJAS_API_KEY` value in `.env.example` is a valid key, although monthly usage limits may be reached, since it's publicly available through this repo.
+
+### Installation without docker
+
+If non-containerized installation is preferred, at `no-docker` git branch is a project version suited for
+direct installation.
+
+Installation steps:
+- clone the repository and `cd` to the top-level directory
+- `git checkout no-docker` - change branch 
+- `python -m venv venv` - create virtual environment
+- `pip install -r requirements.txt` - install packages
+- `cd refund_request_processing_system`
+- `python manage.py migrate` - apply migrations
+- `python manage.py collectstatic` - collect static files
+- `python manage.py createsuperuser` - create admin user
+- configure environment variables if necessary, [as described below](#environment-variables)
+- `python manage.py runserver` - run the development server
+
+The **development server** will listen at `localhost:8000`.
+
+With this installation:
+- SQLite is used as the database,
+- file system cache is used instead of Redis,
+- emails are logged to the console.
+
+#### Environment variables
+
+An `.env.example` file is provided to list used environment variables and default values. **None of these variables is suitable for production.**
+
+Below is a full list with comments:
+
+- `SECRET_KEY=insecure-secret-key`
+- `DEBUG=1` - should be changed to `0` to test 404 and 500 response handlers
+- `DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1`
+- `DATABASE_ENGINE=django.db.backends.sqlite3`
+- `DATABASE_USER=` - kept for consistency, used for PostgreSQL on branch `master`
+- `DATABASE_PASSWORD=` - same
+- `DATABASE_HOST=` - same
+- `DATABASE_PORT=` - same
+- `DATABASE_DB=sqlite3.db`
+- `BASE_URL=http://localhost:8000`
+- `EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend`
+- `EMAIL_HOST=` - kept for consistency, used for Mailpit on branch `master`
+- `EMAIL_PORT=` - same
+- `API_NINJAS_API_KEY=4r5s/X/fxaljNyCcrlldlA==jK1lAnTXcbRTDUQS` - a working API key for development purposes
+- `CACHE_BACKEND=django.core.cache.backends.filebased.FileBasedCache`
+- `REDIS_HOSTNAME=` - kept for consistency, used for Redis cache on branch `master`
+- `REDIS_MAIN_DB=` - same
+
 
 ## Account management
 
@@ -65,7 +120,8 @@ Only authenticated users can file refund requests. Account-related URLs:
 - `accounts/reset/done/` - password reset confirmation page
 
 Password reset functionality will send an emails with a reset link - the email
-can be checked throught Mailpit service at `localhost:8025`.
+can be checked throught Mailpit service at `localhost:8025` or in the development 
+server logs in case of direct installation.
 
 ## Refund requests UI
 
@@ -125,7 +181,7 @@ After form submission IBAN number is also validated before saving the form.
 
 ## Admin site
 
-Admin site allows viewing and and managing refund requests.
+Admin site allows viewing and and managing refund requests and exporting them as CSV.
 
 ### Refund requests list
 
@@ -143,6 +199,10 @@ List includes the following information:
 - admin notes preview (50 characters).
 
 The list is sorted by request status (pending, rejected, approved) and request creation date descending (from the newest).
+
+### Refund requests exporting
+
+Exporting to CSV file is possible via `export` button on the list view.
 
 ### Refund requests list actions
 
@@ -183,6 +243,8 @@ This system allows tracking emission date of each email and recreation of its co
 
 For development, a [Mailpit](https://mailpit.axllent.org/) container is added. It provides an outbox at `localhost:8025`, which is convenient for **viewing the emitted emails**.
 
+Mailpit is only available with containerized installation.
+
 ## Error handling
 
 Custom error pages are provided for the case of 404 and 500 status codes.
@@ -190,3 +252,5 @@ Custom error pages are provided for the case of 404 and 500 status codes.
 ## Tests
 
 To run unit tests, use the command `./scripts/command.sh test`.
+
+In case of direct installation, run `python manage.py test` in `refund_request_processing_system` directory.
