@@ -38,8 +38,7 @@ Installation steps:
 - create `docker/.env` file and fill it with secrets - for development copy the contents of `docker/.env.example` will suffice (see [notes](#notes-on-envexample) below)
 - `docker compose up -d --build` - build and run the containers
 - `./scripts/command.sh migrate` - apply migrations
-- `./scripts/command.sh collectstatic` - collect static files
-- `./scripts/command.sh createsuperuser` - create admin user
+- (optional) `./scripts/command.sh createsuperuser` - create admin user
 
 The **development server** will listen at `localhost:8000` after ensuring that PostgreSQL database is available.
 
@@ -72,9 +71,8 @@ Installation steps:
 - `pip install -r requirements.txt` - install packages
 - `cd refund_request_processing_system`
 - `python manage.py migrate` - apply migrations
-- `python manage.py collectstatic` - collect static files
-- `python manage.py createsuperuser` - create admin user
-- configure environment variables if necessary, [as described below](#environment-variables)
+- (optional) `python manage.py createsuperuser` - create admin user
+- (optional) configure environment variables if desired, [as described below](#environment-variables)
 - `python manage.py runserver` - run the development server
 
 The **development server** will listen at `localhost:8000`.
