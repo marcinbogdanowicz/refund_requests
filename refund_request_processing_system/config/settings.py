@@ -67,16 +67,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": os.environ.get("DATABASE_ENGINE", "django.db.backends.sqlite3"),
-        "USER": os.environ.get("DATABASE_USER", "user"),
-        "PASSWORD": os.environ.get("DATABASE_PASSWORD", "password"),
-        "HOST": os.environ.get("DATABASE_HOST", "localhost"),
-        "PORT": os.environ.get("DATABASE_PORT", "5432"),
-        "NAME": os.environ.get("DATABASE_DB", "sqlite3.db"),
-    }
+DEFAULT_DB = {
+    "ENGINE": os.environ.get("DATABASE_ENGINE", "django.db.backends.sqlite3"),
+    "NAME": os.environ.get("DATABASE_DB", "sqlite3.db"),
 }
+if db_user := os.environ.get("DATABASE_USER"):
+    DEFAULT_DB["USER"] = db_user
+if db_password := os.environ.get("DATABASE_PASSWORD"):
+    DEFAULT_DB["PASSWORD"] = db_password
+if db_host := os.environ.get("DATABASE_HOST"):
+    DEFAULT_DB["HOST"] = db_host
+if db_port := os.environ.get("DATABASE_PORT"):
+    DEFAULT_DB["PORT"] = db_port
+
+DATABASES = {"default": DEFAULT_DB}
 
 
 # Password validation
@@ -126,8 +130,10 @@ BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
 EMAIL_BACKEND = os.getenv(
     "EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend"
 )
-EMAIL_HOST = os.getenv("EMAIL_HOST", "localhost")
-EMAIL_PORT = int(os.getenv("EMAIL_PORT", 25))
+if email_host := os.getenv("EMAIL_HOST"):
+    EMAIL_HOST = email_host
+if email_port := os.getenv("EMAIL_PORT"):
+    EMAIL_PORT = email_port
 
 DEFAULT_FROM_EMAIL = "no-reply@example.com"
 
@@ -143,8 +149,8 @@ CACHE_BACKEND = os.getenv(
     "CACHE_BACKEND", "django.core.cache.backends.filebased.FileBasedCache"
 )
 if CACHE_BACKEND == "django.core.cache.backends.redis.RedisCache":
-    REDIS_HOSTNAME = os.getenv("REDIS_HOSTNAME", "redis")
-    REDIS_MAIN_DB = os.getenv("REDIS_MAIN_DB", 0)
+    REDIS_HOSTNAME = os.getenv("REDIS_HOSTNAME")
+    REDIS_MAIN_DB = os.getenv("REDIS_MAIN_DB")
     REDIS_CACHE_VERSION = 1
     CACHES = {
         "default": {
