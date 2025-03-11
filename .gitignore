@@ -9,3 +9,4 @@ refund_request_processing_system/static/
 venv
 sqlite3.db
 **/cache
+pyproject.toml
