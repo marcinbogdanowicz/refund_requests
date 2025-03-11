@@ -4,14 +4,14 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
-from apps.core.mixins import FlushRedisDBTestMixin
+from apps.core.mixins import ClearCacheTestMixin
 from apps.core.models import UserProfile
 from apps.refunds.enums import RefundReason, RefundStatus
 from apps.refunds.forms import RefundRequestForm
 from apps.refunds.models import RefundRequest
 
 
-class CreateRefundRequestViewTests(FlushRedisDBTestMixin, TestCase):
+class CreateRefundRequestViewTests(ClearCacheTestMixin, TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = User.objects.create_user(

@@ -1,6 +1,5 @@
 from django import forms
-from django.conf import settings
-from redis import Redis
+from django.core.cache import cache
 
 
 class BootstrapFormMixin:
@@ -32,9 +31,7 @@ class OnlyOwnedObjectsViewMixin:
         return qs.none()
 
 
-class FlushRedisDBTestMixin:
-    redis_client = Redis.from_url(settings.REDIS_CACHE['LOCATION'])
-
+class ClearCacheTestMixin:
     def setUp(self):
         super().setUp()
-        self.redis_client.flushdb()
+        cache.clear()

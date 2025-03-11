@@ -2,11 +2,11 @@ from unittest.mock import patch
 
 from django.test import TestCase
 
-from apps.core.mixins import FlushRedisDBTestMixin
+from apps.core.mixins import ClearCacheTestMixin
 from apps.refunds.utils import IBANValidator
 
 
-class IBANValidatorTests(FlushRedisDBTestMixin, TestCase):
+class IBANValidatorTests(ClearCacheTestMixin, TestCase):
     def setUp(self):
         super().setUp()
         self.valid_iban = 'DE89370400440532013000'

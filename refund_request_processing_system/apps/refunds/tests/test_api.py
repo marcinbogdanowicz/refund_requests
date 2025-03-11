@@ -5,10 +5,10 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from apps.core.mixins import FlushRedisDBTestMixin
+from apps.core.mixins import ClearCacheTestMixin
 
 
-class ValidateIBANViewTests(FlushRedisDBTestMixin, APITestCase):
+class ValidateIBANViewTests(ClearCacheTestMixin, APITestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = User.objects.create_user(

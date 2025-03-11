@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+from django.core.exceptions import ImproperlyConfigured
 from django.urls import reverse_lazy
 from import_export.formats.base_formats import CSV
 
@@ -11,7 +12,7 @@ SECRET_KEY = os.getenv(
     'insecure-secret-key',
 )
 
-DEBUG = int(os.getenv('DEBUG', 0))
+DEBUG = int(os.getenv('DEBUG', 1))
 
 ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost 127.0.0.1').split()
 
@@ -66,15 +67,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
 DATABASES = {
     "default": {
-        "ENGINE": 'django.db.backends.postgresql',
-        "USER": os.environ.get("POSTGRES_USER", "user"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "password"),
-        "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
-        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
-        "NAME": os.environ.get("POSTGRES_DB", "postgres_db"),
+        "ENGINE": os.environ.get(
+            "DATABASE_ENGINE", "django.db.backends.sqlite3"
+        ),
+        "USER": os.environ.get("DATABASE_USER", "user"),
+        "PASSWORD": os.environ.get("DATABASE_PASSWORD", "password"),
+        "HOST": os.environ.get("DATABASE_HOST", "localhost"),
+        "PORT": os.environ.get("DATABASE_PORT", "5432"),
+        "NAME": os.environ.get("DATABASE_DB", "sqlite3.db"),
     }
 }
 
@@ -131,18 +133,37 @@ DEFAULT_FROM_EMAIL = 'no-reply@example.com'
 
 LOGIN_REDIRECT_URL = reverse_lazy('refund_list')
 
-API_NINJAS_API_KEY = os.getenv('API_NINJAS_API_KEY')
+API_NINJAS_API_KEY = os.getenv(
+    'API_NINJAS_API_KEY', '4r5s/X/fxaljNyCcrlldlA==jK1lAnTXcbRTDUQS'
+)
 API_NINJAS_IBAN_VALIDATION_URL = 'https://api.api-ninjas.com/v1/iban'
 
-REDIS_HOSTNAME = os.getenv('REDIS_HOSTNAME', 'redis')
-REDIS_MAIN_DB = os.getenv('REDIS_MAIN_DB', 0)
-REDIS_CACHE_VERSION = 1
-REDIS_CACHE = {
-    'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-    'LOCATION': f'redis://{REDIS_HOSTNAME}/{REDIS_MAIN_DB}',
-    'VERSION': REDIS_CACHE_VERSION,
-    'TIMEOUT': 3600,  # 1 hour
-}
-CACHES = {'default': REDIS_CACHE}
+
+CACHE_BACKEND = os.getenv(
+    'CACHE_BACKEND', 'django.core.cache.backends.filebased.FileBasedCache'
+)
+if CACHE_BACKEND == 'django.core.cache.backends.redis.RedisCache':
+    REDIS_HOSTNAME = os.getenv('REDIS_HOSTNAME', 'redis')
+    REDIS_MAIN_DB = os.getenv('REDIS_MAIN_DB', 0)
+    REDIS_CACHE_VERSION = 1
+    CACHES = {
+        'default': {
+            'BACKEND': CACHE_BACKEND,
+            'LOCATION': f'redis://{REDIS_HOSTNAME}/{REDIS_MAIN_DB}',
+            'VERSION': REDIS_CACHE_VERSION,
+            'TIMEOUT': 3600,  # 1 hour
+        }
+    }
+elif CACHE_BACKEND == 'django.core.cache.backends.filebased.FileBasedCache':
+    CACHES = {
+        'default': {
+            'BACKEND': CACHE_BACKEND,
+            'LOCATION': BASE_DIR / 'cache',
+        }
+    }
+else:
+    raise ImproperlyConfigured(
+        f'Configure cache backend {CACHE_BACKEND} before using it.'
+    )
 
 IMPORT_EXPORT_FORMATS = [CSV]
