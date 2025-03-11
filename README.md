@@ -68,6 +68,7 @@ Installation steps:
 - clone the repository and `cd` to the top-level directory
 - `git checkout no-docker` - change branch 
 - `python -m venv venv` - create virtual environment
+- `source venv/bin/activate` - activate virtual environment
 - `pip install -r requirements.txt` - install packages
 - `cd refund_request_processing_system`
 - `python manage.py migrate` - apply migrations
