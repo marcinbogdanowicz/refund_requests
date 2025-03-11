@@ -8,18 +8,16 @@ class BootstrapFormMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
-            css_class = 'form-control'
+            css_class = "form-control"
             if isinstance(field.widget, forms.Select):
-                css_class = 'form-select'
+                css_class = "form-select"
 
-            current_css_classes = field.widget.attrs.get('class', '')
-            field.widget.attrs['class'] = (
-                f'{current_css_classes} {css_class}'.strip()
-            )
+            current_css_classes = field.widget.attrs.get("class", "")
+            field.widget.attrs["class"] = f"{current_css_classes} {css_class}".strip()
 
 
 class OnlyOwnedObjectsViewMixin:
-    user_field_for_filter = 'user'
+    user_field_for_filter = "user"
 
     def get_queryset(self):
         qs = super().get_queryset()

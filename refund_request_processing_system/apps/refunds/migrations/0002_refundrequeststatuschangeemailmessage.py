@@ -8,22 +8,37 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('refunds', '0001_initial'),
+        ("refunds", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='RefundRequestStatusChangeEmailMessage',
+            name="RefundRequestStatusChangeEmailMessage",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('sent_at', models.DateTimeField(blank=True, null=True)),
-                ('new_status', models.CharField(max_length=20)),
-                ('recipients', models.ManyToManyField(to=settings.AUTH_USER_MODEL)),
-                ('refund_request', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='status_change_emails', to='refunds.refundrequest')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("sent_at", models.DateTimeField(blank=True, null=True)),
+                ("new_status", models.CharField(max_length=20)),
+                ("recipients", models.ManyToManyField(to=settings.AUTH_USER_MODEL)),
+                (
+                    "refund_request",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="status_change_emails",
+                        to="refunds.refundrequest",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

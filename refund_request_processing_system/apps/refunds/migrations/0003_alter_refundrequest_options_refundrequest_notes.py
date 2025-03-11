@@ -6,17 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('refunds', '0002_refundrequeststatuschangeemailmessage'),
+        ("refunds", "0002_refundrequeststatuschangeemailmessage"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='refundrequest',
-            options={'ordering': ('-created_at',)},
+            name="refundrequest",
+            options={"ordering": ("-created_at",)},
         ),
         migrations.AddField(
-            model_name='refundrequest',
-            name='notes',
+            model_name="refundrequest",
+            name="notes",
             field=models.TextField(blank=True),
         ),
     ]

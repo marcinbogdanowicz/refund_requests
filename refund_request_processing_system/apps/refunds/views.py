@@ -15,8 +15,8 @@ from apps.refunds.utils import IBANValidator
 class CreateRefundRequestView(LoginRequiredMixin, CreateView):
     model = RefundRequest
     form_class = RefundRequestForm
-    template_name = 'refunds/create.html'
-    success_url = reverse_lazy('refund_list')
+    template_name = "refunds/create.html"
+    success_url = reverse_lazy("refund_list")
 
     def get_initial(self):
         return self.form_class.initial_for_user(self.request.user)
@@ -26,12 +26,10 @@ class CreateRefundRequestView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class RefundRequestListView(
-    LoginRequiredMixin, OnlyOwnedObjectsViewMixin, ListView
-):
+class RefundRequestListView(LoginRequiredMixin, OnlyOwnedObjectsViewMixin, ListView):
     model = RefundRequest
-    template_name = 'refunds/list.html'
-    context_object_name = 'refund_requests'
+    template_name = "refunds/list.html"
+    context_object_name = "refund_requests"
     paginate_by = 10
 
 
@@ -39,8 +37,8 @@ class RefundRequestDetailView(
     LoginRequiredMixin, OnlyOwnedObjectsViewMixin, DetailView
 ):
     model = RefundRequest
-    template_name = 'refunds/detail.html'
-    context_object_name = 'refund_request'
+    template_name = "refunds/detail.html"
+    context_object_name = "refund_request"
 
 
 class ValidateIBANView(APIView):
@@ -51,6 +49,6 @@ class ValidateIBANView(APIView):
 
         try:
             validator = IBANValidator(**data)
-            return Response({'error': validator.get_error()})
+            return Response({"error": validator.get_error()})
         except RuntimeError as e:
-            return Response({'error': str(e)}, status.HTTP_400_BAD_REQUEST)
+            return Response({"error": str(e)}, status.HTTP_400_BAD_REQUEST)

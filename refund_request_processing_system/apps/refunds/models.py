@@ -9,13 +9,13 @@ from apps.refunds.enums import RefundStatus
 
 class RefundRequest(models.Model):
     STATUS_CHOICES = [
-        (RefundStatus.PENDING, 'Pending'),
-        (RefundStatus.APPROVED, 'Approved'),
-        (RefundStatus.REJECTED, 'Rejected'),
+        (RefundStatus.PENDING, "Pending"),
+        (RefundStatus.APPROVED, "Approved"),
+        (RefundStatus.REJECTED, "Rejected"),
     ]
 
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='refund_requests'
+        User, on_delete=models.CASCADE, related_name="refund_requests"
     )
 
     order_number = models.CharField(max_length=100)
@@ -37,16 +37,14 @@ class RefundRequest(models.Model):
     bank_name = models.CharField(max_length=200)
     account_type = models.CharField(
         max_length=20,
-        choices=[('business', 'Business'), ('private', 'Private')],
+        choices=[("business", "Business"), ("private", "Private")],
     )
     iban = models.CharField(max_length=34)
     iban_verified = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    status = models.CharField(
-        max_length=20, choices=STATUS_CHOICES, default='pending'
-    )
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
     notes = models.TextField(blank=True)
 
     def __str__(self):
@@ -54,7 +52,7 @@ class RefundRequest(models.Model):
 
     @property
     def full_link(self):
-        return settings.BASE_URL + reverse('refund_detail', args=[self.id])
+        return settings.BASE_URL + reverse("refund_detail", args=[self.id])
 
     def emit_status_change_email(self):
         email_message = RefundRequestStatusChangeEmailMessage.objects.create(
@@ -65,4 +63,4 @@ class RefundRequest(models.Model):
         email_message.send()
 
     class Meta:
-        ordering = ('-created_at',)
+        ordering = ("-created_at",)

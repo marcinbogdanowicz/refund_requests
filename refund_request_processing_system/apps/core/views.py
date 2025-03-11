@@ -8,15 +8,13 @@ from apps.core.forms import CustomUserCreationForm, UserProfileCreationForm
 
 class SignUpView(TemplateView):
     template_name = "registration/signup.html"
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy("login")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user_form'] = (
-            kwargs.get('user_form') or CustomUserCreationForm()
-        )
-        context['profile_form'] = (
-            kwargs.get('profile_form') or UserProfileCreationForm()
+        context["user_form"] = kwargs.get("user_form") or CustomUserCreationForm()
+        context["profile_form"] = (
+            kwargs.get("profile_form") or UserProfileCreationForm()
         )
         return context
 
@@ -29,9 +27,7 @@ class SignUpView(TemplateView):
             return redirect(self.success_url)
 
         return self.render_to_response(
-            self.get_context_data(
-                user_form=user_form, profile_form=profile_form
-            )
+            self.get_context_data(user_form=user_form, profile_form=profile_form)
         )
 
     @transaction.atomic()
@@ -43,8 +39,8 @@ class SignUpView(TemplateView):
 
 
 def handler_404(request, exception):
-    return render(request, 'errors/404.html', status=404)
+    return render(request, "errors/404.html", status=404)
 
 
 def handler_500(request):
-    return render(request, 'errors/500.html', status=400)
+    return render(request, "errors/500.html", status=400)

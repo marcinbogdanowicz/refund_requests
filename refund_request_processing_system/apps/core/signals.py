@@ -7,9 +7,5 @@ from apps.core.models import UserProfile
 
 @receiver(post_save, sender=User)
 def create_user_profile_for_superusers(sender, instance, created, **kwargs):
-    if (
-        created
-        and instance.is_superuser
-        and not hasattr(instance, 'userprofile')
-    ):
+    if created and instance.is_superuser and not hasattr(instance, "userprofile"):
         UserProfile.objects.create(user=instance)

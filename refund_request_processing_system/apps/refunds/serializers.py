@@ -6,4 +6,4 @@ class IBANSerializer(serializers.Serializer):
     country = serializers.CharField(max_length=100)
 
     class Meta:
-        fields = ('iban', 'country')
+        fields = ("iban", "country")

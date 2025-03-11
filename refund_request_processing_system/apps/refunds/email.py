@@ -5,7 +5,7 @@ from apps.core.email import BaseEmailMessage
 
 class RefundRequestStatusChangeEmailMessage(BaseEmailMessage):
     refund_request = models.ForeignKey(
-        'refunds.RefundRequest',
+        "refunds.RefundRequest",
         on_delete=models.CASCADE,
         related_name="status_change_emails",
     )

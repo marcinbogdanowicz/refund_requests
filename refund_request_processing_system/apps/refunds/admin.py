@@ -21,48 +21,48 @@ class RefundRequestAdmin(ImportExportModelAdmin):
     model = RefundRequest
     resource_classes = [RefundRequestResource]
     list_display = [
-        'id',
-        'status',
-        'iban_verified',
-        'created_at',
-        'updated_at',
-        'order_number',
-        'full_name',
-        'email',
-        'phone_number',
-        'country',
-        'notes_preview',
+        "id",
+        "status",
+        "iban_verified",
+        "created_at",
+        "updated_at",
+        "order_number",
+        "full_name",
+        "email",
+        "phone_number",
+        "country",
+        "notes_preview",
     ]
     readonly_fields = [
-        'user',
-        'order_number',
-        'order_date',
-        'first_name',
-        'last_name',
-        'phone_number',
-        'email',
-        'country',
-        'address',
-        'postal_code',
-        'city',
-        'products',
-        'reason',
-        'bank_name',
-        'account_type',
-        'iban',
-        'iban_verified',
-        'created_at',
-        'updated_at',
-        'status',
+        "user",
+        "order_number",
+        "order_date",
+        "first_name",
+        "last_name",
+        "phone_number",
+        "email",
+        "country",
+        "address",
+        "postal_code",
+        "city",
+        "products",
+        "reason",
+        "bank_name",
+        "account_type",
+        "iban",
+        "iban_verified",
+        "created_at",
+        "updated_at",
+        "status",
     ]
-    list_filter = ['status', 'created_at', 'country']
+    list_filter = ["status", "created_at", "country"]
     list_per_page = 20
 
     actions = [
-        'approve_refund_requests',
-        'reject_refund_requests',
-        'mark_refund_requests_as_pending',
-        'validate_iban',
+        "approve_refund_requests",
+        "reject_refund_requests",
+        "mark_refund_requests_as_pending",
+        "validate_iban",
     ]
 
     def full_name(self, obj):
@@ -71,12 +71,10 @@ class RefundRequestAdmin(ImportExportModelAdmin):
     def notes_preview(self, obj):
         return textwrap.shorten(obj.notes, width=50)
 
-    @admin.action(description='Approve')
+    @admin.action(description="Approve")
     def approve_refund_requests(self, request, queryset):
         rejected_refund_requests_ids = list(
-            queryset.filter(status=RefundStatus.REJECTED).values_list(
-                'id', flat=True
-            )
+            queryset.filter(status=RefundStatus.REJECTED).values_list("id", flat=True)
         )
         if rejected_refund_requests_ids:
             self.message_user(
@@ -87,17 +85,15 @@ class RefundRequestAdmin(ImportExportModelAdmin):
                     "<p>If you are sure these should be approved, assign them "
                     "'Pending' status first"
                 ),
-                level='ERROR',
+                level="ERROR",
             )
             return
         self._change_refund_requests_status(queryset, RefundStatus.APPROVED)
 
-    @admin.action(description='Reject')
+    @admin.action(description="Reject")
     def reject_refund_requests(self, request, queryset):
         approved_refund_requests_ids = list(
-            queryset.filter(status=RefundStatus.APPROVED).values_list(
-                'id', flat=True
-            )
+            queryset.filter(status=RefundStatus.APPROVED).values_list("id", flat=True)
         )
         if approved_refund_requests_ids:
             self.message_user(
@@ -108,46 +104,42 @@ class RefundRequestAdmin(ImportExportModelAdmin):
                     "<p>If you are sure these should be rejected, assign them "
                     "'Pending' status first"
                 ),
-                level='ERROR',
+                level="ERROR",
             )
             return
         self._change_refund_requests_status(queryset, RefundStatus.REJECTED)
 
-    @admin.action(description='Mark as pending')
+    @admin.action(description="Mark as pending")
     def mark_refund_requests_as_pending(self, request, queryset):
         self._change_refund_requests_status(queryset, RefundStatus.PENDING)
 
-    @admin.action(description='Validate IBAN')
+    @admin.action(description="Validate IBAN")
     def validate_iban(self, request, queryset):
         errors = {}
         valid_ids = []
         for refund_request in queryset.filter(iban_verified=False):
-            validator = IBANValidator(
-                refund_request.iban, refund_request.country
-            )
+            validator = IBANValidator(refund_request.iban, refund_request.country)
             if error := validator.get_error():
                 errors[refund_request.id] = error
             else:
                 valid_ids.append(refund_request.id)
 
-        message_level = 'ERROR' if errors else 'SUCCESS'
-        success_message = ''
-        error_message = ''
+        message_level = "ERROR" if errors else "SUCCESS"
+        success_message = ""
+        error_message = ""
         if valid_ids:
             success_message = (
-                'IBANs for the following refund requests were successfully '
-                f'validated: {comma_join_str(valid_ids)}<br>'
+                "IBANs for the following refund requests were successfully "
+                f"validated: {comma_join_str(valid_ids)}<br>"
             )
         if errors:
-            error_message = (
-                'IBAN validation failed for the following refund requests:'
-            )
+            error_message = "IBAN validation failed for the following refund requests:"
             for refund_request_id, error in errors.items():
-                error_message += f'<br>    - {refund_request_id}: {error}'
+                error_message += f"<br>    - {refund_request_id}: {error}"
 
         self.message_user(
             request,
-            mark_safe(f'{success_message}{error_message}'),
+            mark_safe(f"{success_message}{error_message}"),
             level=message_level,
         )
 
@@ -165,7 +157,7 @@ class RefundRequestAdmin(ImportExportModelAdmin):
                 When(status=RefundStatus.REJECTED, then=Value(3)),
                 output_field=IntegerField(),
             )
-        ).order_by('_status_order', '-created_at')
+        ).order_by("_status_order", "-created_at")
 
     def has_import_permission(self, request):
         return False
