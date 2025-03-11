@@ -123,7 +123,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_BACKEND = os.getenv(
+    "EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend"
+)
 EMAIL_HOST = os.getenv("EMAIL_HOST", "localhost")
 EMAIL_PORT = int(os.getenv("EMAIL_PORT", 25))
 
